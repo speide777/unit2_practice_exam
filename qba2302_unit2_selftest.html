@@ -1,0 +1,1104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QBA 2302 · Unit 2 Self-Test</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,500;0,600;1,500&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --green:#154734; --green-deep:#0d3324; --gold:#FFB81C; --gold-soft:#FFF1CC;
+    --paper:#F7F4EC; --ink:#1C1B18; --ink-soft:#55524A; --line:#DCD6C4;
+    --wrong:#A83E2C; --wrong-soft:#FBEAE5; --right:#2F6B44; --right-soft:#E6F2EA; --card:#FFFFFF;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0;min-height:100vh;background-color:var(--paper);
+    background-image:
+      repeating-linear-gradient(0deg,rgba(21,71,52,.05) 0,rgba(21,71,52,.05) 1px,transparent 1px,transparent 28px),
+      repeating-linear-gradient(90deg,rgba(21,71,52,.05) 0,rgba(21,71,52,.05) 1px,transparent 1px,transparent 28px);
+    color:var(--ink);font-family:'Inter',system-ui,sans-serif;font-size:16px;line-height:1.45;
+    display:flex;justify-content:center;padding:24px 14px 70px;
+  }
+  .wrap{width:100%;max-width:660px}
+  header{margin-bottom:18px}
+  .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--green);letter-spacing:.02em;margin-bottom:6px}
+  h1{font-family:'Lora',serif;font-weight:600;font-size:26px;margin:0 0 4px;color:var(--green-deep)}
+  .sub{color:var(--ink-soft);font-size:14.5px;margin:0}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 18px 20px;box-shadow:0 1px 0 rgba(0,0,0,.03),0 8px 22px -14px rgba(21,71,52,.35)}
+  .hidden{display:none!important}
+  h2{font-family:'Lora',serif;font-size:19px;margin:0 0 10px;color:var(--green-deep)}
+  .muted{color:var(--ink-soft);font-size:14px}
+  a{color:var(--green)}
+
+  /* intro */
+  .opt{display:flex;gap:12px;align-items:flex-start;border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;margin:10px 0;cursor:pointer;background:#fff}
+  .opt input{margin-top:4px;accent-color:var(--green);width:18px;height:18px;flex:none}
+  .opt.sel{border-color:var(--green);background:#F2F8F4}
+  .opt b{display:block;font-size:15.5px}
+  .opt span{font-size:13.5px;color:var(--ink-soft)}
+  select.partsel{width:100%;margin-top:8px;font-size:15px;padding:9px 10px;border:1.5px solid var(--line);border-radius:9px;background:#fff;font-family:inherit}
+  .toggle{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:14px 2px 4px;font-size:15px}
+  .switch{position:relative;width:46px;height:26px;flex:none}
+  .switch input{opacity:0;width:0;height:0}
+  .slider{position:absolute;inset:0;background:#CFC9B6;border-radius:26px;transition:.2s;cursor:pointer}
+  .slider:before{content:"";position:absolute;height:20px;width:20px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.2s}
+  .switch input:checked + .slider{background:var(--green)}
+  .switch input:checked + .slider:before{transform:translateX(20px)}
+  .note{background:var(--gold-soft);border:1px solid #F0D58A;border-radius:10px;padding:10px 12px;font-size:14px;margin:14px 0 4px}
+
+  button{font-family:inherit;font-size:16px;font-weight:600;border-radius:11px;padding:13px 18px;border:1.5px solid var(--green);cursor:pointer;-webkit-tap-highlight-color:transparent}
+  .btn-primary{background:var(--green);color:#fff}
+  .btn-primary:active{background:var(--green-deep)}
+  .btn-ghost{background:#fff;color:var(--green)}
+  .btn-gold{background:var(--gold);border-color:#D99A00;color:#2A2200}
+  .btn-row{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
+  .btn-row button{flex:1 1 140px}
+  .big{width:100%;margin-top:14px}
+
+  /* bubbles */
+  .bubbles{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 14px}
+  .bub{width:30px;height:30px;border-radius:50%;border:2px solid var(--line);background:#fff;font:600 12px 'IBM Plex Mono',monospace;color:var(--ink-soft);display:flex;align-items:center;justify-content:center;padding:0;cursor:pointer}
+  .bub.cur{box-shadow:0 0 0 3px rgba(21,71,52,.25);border-color:var(--green);color:var(--green)}
+  .bub.full{background:var(--right);border-color:var(--right);color:#fff}
+  .bub.part{background:var(--gold);border-color:#D99A00;color:#2A2200}
+  .bub.zero{background:var(--wrong);border-color:var(--wrong);color:#fff}
+  .bub.skip{border:2px dashed #D99A00;background:var(--gold-soft);color:#7A5600}
+  .qtop{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:10px}
+  .tag{font:600 11.5px 'IBM Plex Mono',monospace;color:var(--green);background:#EAF3EE;border-radius:6px;padding:4px 8px;letter-spacing:.02em;text-transform:uppercase}
+  .counter{font:500 12.5px 'IBM Plex Mono',monospace;color:var(--ink-soft)}
+  .qtitle{font-family:'Lora',serif;font-size:19px;font-weight:600;margin:2px 0 8px;color:var(--green-deep)}
+  .qbody{font-size:16px;margin:0 0 10px}
+  .qbody p{margin:0 0 8px}
+  .qbody ul{margin:0 0 8px 18px;padding:0}
+  table.data{border-collapse:collapse;margin:8px 0 12px;font-size:14.5px;width:auto;max-width:100%}
+  table.data th,table.data td{border:1px solid var(--line);padding:6px 11px;text-align:center}
+  table.data th{background:#EAF3EE;color:var(--green-deep);font-weight:600}
+  table.data td:first-child,table.data th:first-child{text-align:left}
+  .hint{font-size:13.5px;color:var(--ink-soft);background:#F4F1E7;border-radius:8px;padding:8px 10px;margin:4px 0 10px}
+
+  .item{border-top:1px solid var(--line);padding:12px 0 10px}
+  .item:first-of-type{border-top:none}
+  .item .lab{display:flex;gap:10px;align-items:flex-start}
+  .letter{flex:none;width:24px;height:24px;border-radius:6px;background:var(--green);color:#fff;font:600 12.5px 'IBM Plex Mono',monospace;display:flex;align-items:center;justify-content:center;margin-top:1px}
+  .item .txt{flex:1;font-size:15.5px}
+  .inwrap{margin:8px 0 0 34px}
+  input.num{width:100%;max-width:240px;font:500 17px 'IBM Plex Mono',monospace;padding:10px 12px;border:1.5px solid var(--line);border-radius:9px;background:#fff;color:var(--ink)}
+  input.num:focus,select.pick:focus,.partsel:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 3px rgba(21,71,52,.15)}
+  select.pick{width:100%;font-size:15.5px;padding:10px 10px;border:1.5px solid var(--line);border-radius:9px;background:#fff;font-family:inherit;color:var(--ink)}
+  .seg{display:flex;gap:8px;flex-wrap:wrap}
+  .seg label{flex:1 1 120px;border:1.5px solid var(--line);border-radius:9px;padding:10px 12px;cursor:pointer;display:flex;gap:8px;align-items:center;background:#fff;font-size:15px}
+  .seg input{accent-color:var(--green);width:17px;height:17px}
+  .seg label.on{border-color:var(--green);background:#F2F8F4}
+  .chk{display:flex;gap:10px;align-items:flex-start;border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;margin:8px 0;cursor:pointer;background:#fff;font-size:15.5px}
+  .chk input{margin-top:3px;accent-color:var(--green);width:18px;height:18px;flex:none}
+  .chk.on{border-color:var(--green);background:#F2F8F4}
+  .fb{margin:8px 0 0 34px;font-size:14.5px;border-radius:9px;padding:8px 10px}
+  .fb.ok{background:var(--right-soft);color:#1D4A2E}
+  .fb.bad{background:var(--wrong-soft);color:#7C2B1E}
+  .fb .how{display:block;margin-top:4px;color:var(--ink-soft);font-size:13.5px}
+  .fb code,.how code{font-family:'IBM Plex Mono',monospace;font-size:13px;background:rgba(0,0,0,.05);padding:1px 5px;border-radius:5px;word-break:break-word}
+  .locked input.num,.locked select.pick{background:#F7F5EE}
+  .scorebar{margin:12px 0 0;padding:10px 12px;border-radius:10px;font-weight:600;font-size:15px}
+  .scorebar.full{background:var(--right-soft);color:#1D4A2E}
+  .scorebar.part{background:var(--gold-soft);color:#6B4A00}
+  .scorebar.zero{background:var(--wrong-soft);color:#7C2B1E}
+
+  /* results */
+  .bigscore{font-family:'Lora',serif;font-size:46px;font-weight:600;color:var(--green-deep);margin:4px 0 0;line-height:1.05}
+  .pct{font:600 15px 'IBM Plex Mono',monospace;color:var(--ink-soft)}
+  .topic-row{display:flex;justify-content:space-between;gap:10px;padding:9px 0;border-top:1px solid var(--line);font-size:15px}
+  .topic-row:first-of-type{border-top:none}
+  .pill{font:600 12px 'IBM Plex Mono',monospace;background:var(--wrong-soft);color:#7C2B1E;border-radius:999px;padding:3px 9px;white-space:nowrap;align-self:center}
+  details.rev{border:1px solid var(--line);border-radius:10px;margin:8px 0;background:#fff}
+  details.rev summary{padding:10px 12px;cursor:pointer;font-weight:600;font-size:15px}
+  details.rev .inner{padding:2px 12px 12px;font-size:14.5px}
+  .revline{border-top:1px dashed var(--line);padding:8px 0}
+  .revline .you{color:var(--wrong)}
+  .revline .corr{color:var(--right);font-weight:600}
+
+  /* modal */
+  .modal{position:fixed;inset:0;background:rgba(13,51,36,.55);display:flex;align-items:center;justify-content:center;padding:20px;z-index:50}
+  .modal .box{background:#fff;border-radius:14px;padding:20px;max-width:380px;width:100%}
+  .modal h3{margin:0 0 6px;font-family:'Lora',serif;color:var(--green-deep)}
+  footer{margin-top:20px;font-size:12.5px;color:var(--ink-soft);text-align:center}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">QBA 2302 · BUSINESS STATISTICS</div>
+    <h1>Unit 2 Self-Test</h1>
+    <p class="sub">Probability, counting, and distributions. New numbers every attempt.</p>
+  </header>
+
+  <!-- INTRO -->
+  <section id="intro" class="card">
+    <h2>Before you start</h2>
+    <div class="note">Have <b>Excel</b> and your <b>formula sheet</b> open, just like on the real exam.
+      <a id="fslink" href="Unit_2_formula_sheet_with_excel.pdf" target="_blank" rel="noopener">Open the formula sheet</a>.</div>
+    <label class="opt sel" id="optFull">
+      <input type="radio" name="mode" value="full" checked>
+      <div><b>Full practice exam</b><span>24 questions drawn from every part, with fresh numbers each time.</span></div>
+    </label>
+    <label class="opt" id="optPart">
+      <input type="radio" name="mode" value="part">
+      <div><b>Practice one part</b><span>Drill a single topic area as many times as you like.</span>
+        <select id="partSel" class="partsel"></select></div>
+    </label>
+    <div class="toggle"><span>Shuffle question order</span>
+      <label class="switch"><input type="checkbox" id="shuf"><span class="slider"></span></label></div>
+    <button class="btn-primary big" id="startBtn">Start</button>
+    <p class="muted" style="margin:14px 0 0">Enter probabilities as decimals (like .3150), or as fractions (like 1/72) when the answer is tiny. Tap <b>Check answer</b> to see how Excel gets it. You get partial credit for each part you get right. No login, nothing personal is collected.</p>
+  </section>
+
+  <!-- QUIZ -->
+  <section id="quiz" class="hidden">
+    <div class="bubbles" id="bubbles"></div>
+    <div class="card">
+      <div class="qtop"><span class="tag" id="qtag"></span><span class="counter" id="qcount"></span></div>
+      <div class="qtitle" id="qtitle"></div>
+      <div class="qbody" id="qbody"></div>
+      <div id="items"></div>
+      <div id="scorebar"></div>
+      <div class="btn-row" id="qbtns"></div>
+    </div>
+    <p style="text-align:center;margin:14px 0 0"><button class="btn-ghost" id="finishEarly" style="padding:9px 16px;font-size:14px;font-weight:600">Finish and see results</button></p>
+  </section>
+
+  <!-- RESULTS -->
+  <section id="results" class="hidden"></section>
+  <footer>Practice only. Your instructor's exam will use different questions.</footer>
+</div>
+<div id="modal" class="modal hidden"><div class="box" id="modalBox"></div></div>
+
+<script>
+/* ============================================================
+   MATH
+   ============================================================ */
+const M = {
+  cdf(x){
+    const a = Math.abs(x); let c;
+    if (a > 37) c = 0;
+    else {
+      const e = Math.exp(-a*a/2);
+      if (a < 7.07106781186547){
+        let b = 3.52624965998911E-02*a + 0.700383064443688;
+        b = b*a + 6.37396220353165; b = b*a + 33.912866078383; b = b*a + 112.079291497871;
+        b = b*a + 221.213596169931; b = b*a + 220.206867912376;
+        c = e*b;
+        let d = 8.83883476483184E-02*a + 1.75566716318264;
+        d = d*a + 16.064177579207; d = d*a + 86.7807322029461; d = d*a + 296.564248779674;
+        d = d*a + 637.333633378831; d = d*a + 793.826512519948; d = d*a + 440.413735824752;
+        c = c/d;
+      } else {
+        let b = a + 0.65; b = a + 4/b; b = a + 3/b; b = a + 2/b; b = a + 1/b;
+        c = e/b/2.506628274631;
+      }
+    }
+    return x > 0 ? 1 - c : c;
+  },
+  inv(p){
+    const a=[-3.969683028665376e+01,2.209460984245205e+02,-2.759285104469687e+02,1.383577518672690e+02,-3.066479806614716e+01,2.506628277459239e+00];
+    const b=[-5.447609879822406e+01,1.615858368580409e+02,-1.556989798598866e+02,6.680131188771972e+01,-1.328068155288572e+01];
+    const c=[-7.784894002430293e-03,-3.223964580411365e-01,-2.400758277161838e+00,-2.549732539343734e+00,4.374664141464968e+00,2.938163982698783e+00];
+    const d=[7.784695709041462e-03,3.224671290700398e-01,2.445134137142996e+00,3.754408661907416e+00];
+    const pl=0.02425, ph=1-pl; let x;
+    if (p < pl){ const q=Math.sqrt(-2*Math.log(p)); x=(((((c[0]*q+c[1])*q+c[2])*q+c[3])*q+c[4])*q+c[5])/((((d[0]*q+d[1])*q+d[2])*q+d[3])*q+1); }
+    else if (p <= ph){ const q=p-0.5, r=q*q; x=(((((a[0]*r+a[1])*r+a[2])*r+a[3])*r+a[4])*r+a[5])*q/(((((b[0]*r+b[1])*r+b[2])*r+b[3])*r+b[4])*r+1); }
+    else { const q=Math.sqrt(-2*Math.log(1-p)); x=-(((((c[0]*q+c[1])*q+c[2])*q+c[3])*q+c[4])*q+c[5])/((((d[0]*q+d[1])*q+d[2])*q+d[3])*q+1); }
+    const e = M.cdf(x) - p, u = e*Math.sqrt(2*Math.PI)*Math.exp(x*x/2);
+    return x - u/(1 + x*u/2);
+  },
+  comb(n,k){ if(k<0||k>n) return 0; k=Math.min(k,n-k); let r=1; for(let i=1;i<=k;i++) r=r*(n-k+i)/i; return Math.round(r); },
+  perm(n,k){ let r=1; for(let i=0;i<k;i++) r*=(n-i); return r; },
+  bpmf(n,p,k){ if(k<0||k>n) return 0; return M.comb(n,k)*Math.pow(p,k)*Math.pow(1-p,n-k); },
+  bcdf(n,p,k){ let s=0; for(let i=0;i<=k;i++) s+=M.bpmf(n,p,i); return Math.min(1,s); },
+  binv(n,p,q){ let s=0; for(let k=0;k<=n;k++){ s+=M.bpmf(n,p,k); if(s>=q-1e-12) return k; } return n; }
+};
+
+/* ============================================================
+   HELPERS
+   ============================================================ */
+const rnd = (a,b)=> a + Math.floor(Math.random()*(b-a+1));
+const pick = arr => arr[Math.floor(Math.random()*arr.length)];
+const shuffle = arr => { const a=arr.slice(); for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]];} return a; };
+const sample = (arr,n)=> shuffle(arr).slice(0,n);
+const fp = x => (+x).toFixed(2).replace(/^0\./,'.').replace(/^-0\./,'-.');   // .70
+const f4 = x => (+x).toFixed(4);
+const f2 = x => (+x).toFixed(2);
+const nf = x => Number(x).toLocaleString('en-US');
+const pctS = x => (x*100).toFixed(2);
+const clean = x => +(+x).toFixed(10);   // trims float noise for display
+const PR  = {abs:0.0006};                // ordinary probability
+const PRZ = {abs:0.002};                 // normal-curve probability (students may round z)
+const SM  = {abs:0.0002, rel:0.03};      // tiny probabilities
+const INT = {abs:0.001};
+const CNT = {abs:0.75};                  // expected counts (rounding)
+
+function parseNum(s){
+  s = String(s==null?'':s).trim().replace(/,/g,'').replace(/\$/g,'').replace(/−/g,'-').replace(/\s+/g,'');
+  if(!s) return NaN;
+  let pct=false; if(s.endsWith('%')){ pct=true; s=s.slice(0,-1); }
+  let v;
+  if (s.includes('/')){ const [a,b]=s.split('/'); v = (a===''||b==='') ? NaN : parseFloat(a)/parseFloat(b); if(!/^-?[\d.]+\/[\d.]+$/.test(s)) v=NaN; }
+  else v = /^-?(\d+\.?\d*|\.\d+)(e[-+]?\d+)?$/i.test(s) ? Number(s) : NaN;
+  return pct ? v/100 : v;
+}
+function numOK(v, ans, tol){ if(!isFinite(v)) return false; return Math.abs(v-ans) <= Math.max(tol.abs||0, (tol.rel||0)*Math.abs(ans)); }
+
+/* item constructors */
+const N  = (label,text,ans,o={}) => ({type:'num',label,text,ans,tol:o.tol||PR,dp:o.dp==null?4:o.dp,how:o.how||'',neg:!!o.neg,unit:o.unit||''});
+const CH = (label,text,choices,ansIdx,o={}) => ({type:'choice',label,text,choices,ans:ansIdx,how:o.how||''});
+
+/* ============================================================
+   QUESTION TEMPLATES
+   Each build() returns a fresh randomized question.
+   ============================================================ */
+const PARTS = {
+  1:'Matching and concepts', 2:'Probability rules', 3:'Counting arrangements',
+  4:'Discrete distributions', 5:'Binomial distribution', 6:'Normal distribution', 7:'Uniform distribution'
+};
+const TEMPLATES = [];
+const def = (id,part,topic,build)=> TEMPLATES.push({id,part,topic,build});
+const IDX = (arr,v)=> arr.indexOf(v);
+
+/* ---------- PART 1: MATCHING AND CONCEPTS ---------- */
+def('m_types',1,'Types of probability',()=>{
+  const g=rnd(8,15), r=rnd(3,9), b=rnd(3,9), t=pick([100,200,250]), y=pick([2,4,5]);
+  const ne=pick([20,40,50]), ke=Math.round(ne*pick([.45,.6,.7,.75,.8]));
+  const pc=pick([40,55,60,65,70]);
+  const classical = pick([
+    `Your group chat has ${g} members and one name is drawn at random to pick tonight's restaurant. The probability it is you is 1/${g}.`,
+    `A bag holds ${r} red and ${b} blue LEGO bricks. The probability of drawing a red brick at random is ${r}/${r+b}.`,
+    `A raffle sold ${t} tickets and you hold ${y}, so your chance of winning is ${y}/${t}.`]);
+  const empirical = pick([
+    `Of the last ${ne} home football games, the team scored 30 or more points in ${ke} of them, so you estimate the chance of 30+ points in the next game at ${fp(ke/ne)}.`,
+    `Your bus was late ${ke} of the last ${ne} mornings, so you estimate a ${fp(ke/ne)} chance it is late tomorrow.`,
+    `You tracked ${ne} nights of dinner at the dining hall and pizza was served on ${ke} of them, so you estimate ${fp(ke/ne)} for tonight.`]);
+  const subjective = pick([
+    `Based on how your professor has been talking all week, you feel there is a ${pc}% chance the exam will be curved.`,
+    `With no past data at all, you guess there is a ${pc}% chance your favorite band announces a campus concert this year.`,
+    `A founder with no sales history believes there is a ${pc}% chance a new app will go viral.`]);
+  const lln = pick([
+    `A basketball player's free-throw percentage bounces around early in the season, but after hundreds of attempts it settles near her true skill level.`,
+    `Early on, the share of heads in your coin flips bounces around, but after thousands of flips it settles very close to 50%.`,
+    `As more and more students rate a campus coffee shop in an app, the average rating settles toward the true customer satisfaction.`]);
+  const rows = shuffle([
+    {text:classical,ans:'Classical Probability',how:'Equally likely outcomes: number of favorable outcomes divided by total outcomes.'},
+    {text:empirical,ans:'Empirical Probability',how:'Based on observed past data: number of times it happened divided by number of trials.'},
+    {text:subjective,ans:'Subjective Probability',how:'A personal judgment with no formal counting or history.'},
+    {text:lln,ans:'Law of Large Numbers',how:'More observations make the estimate settle near the true probability.'}]);
+  return {kind:'match',title:'Match the Terms with the Examples',
+    intro:'Match each example to the best term. Some choices will not be used.',
+    rows, bank:shuffle(['Classical Probability','Empirical Probability','Subjective Probability','Law of Large Numbers','Permutation','Combination','Conditional Probability'])};
+});
+
+def('m_approach',1,'Choosing the right approach',()=>{
+  const a=rnd(3,6), b=rnd(3,5), c=rnd(2,4), n1=rnd(10,15), n2=rnd(14,20), k2=rnd(3,5);
+  const rows = shuffle([
+    {text:`A food truck offers ${a} entrees, ${b} sides, and ${c} drinks. How many different meals are possible?`,ans:'Multiplication Formula',how:'Independent choices: multiply the number of ways (x)(y)(z).'},
+    {text:`${n1} students enter a pitch competition and the judges award 1st, 2nd, and 3rd place. How many outcomes are possible?`,ans:'Permutation Formula',how:'Order matters, so use nPx. Excel: PERMUT.'},
+    {text:`You pick ${k2} of your ${n2} classmates for a study group. Order does not matter. How many groups are possible?`,ans:'Combination Formula',how:'Order does not matter, so use nCx. Excel: COMBIN.'},
+    {text:pick(['The probability a student passes the exam given that they attended the review session.','The probability a movie wins Best Picture given that it was nominated.']),ans:'Conditional Probability',how:'The keywords "given that" signal P(B|A).'}]);
+  return {kind:'match',title:'Match the Approach with the Example',
+    intro:'Match each example to the approach you would use. Some choices will not be used.',
+    rows, bank:shuffle(['Multiplication Formula','Permutation Formula','Combination Formula','Conditional Probability','Union (Addition Rule)','Complement Rule','Independent Intersection'])};
+});
+
+def('m_notation',1,'Reading probability notation',()=>{
+  const F = {
+    or:'P(A) + P(B) − P(A ∩ B)', ind:'P(A) × P(B)', cond:'P(A) × P(B | A)', not:'1 − P(A)'
+  };
+  const rows = shuffle([
+    {text:pick(['The probability a student has an iPhone OR a MacBook (or both).','The probability a student streams on Netflix OR Hulu (or both).']),ans:F.or,how:'Keyword OR: union, so add and subtract the overlap.'},
+    {text:pick(['The probability a student is left-handed AND likes spicy food, assuming the two are independent.','The probability a student drinks coffee AND plays intramurals, assuming the two are independent.']),ans:F.ind,how:'Keyword AND with independent events: multiply.'},
+    {text:pick(['The probability a student is a business major AND, given that they are a business major, takes accounting this semester.','The probability a student attends the review session AND, given that they attend, passes the exam.']),ans:F.cond,how:'AND plus "given that": the rule of multiplication, P(A) × P(B|A).'},
+    {text:pick(['The probability a student does NOT have a car on campus.','The probability a student does NOT use the Canvas app.']),ans:F.not,how:'Keyword NOT: the complement rule.'}]);
+  return {kind:'match',title:'Match the Notation with the Example',
+    intro:'Match each example to the formula you would use. Some choices will not be used.',
+    rows, bank:shuffle([F.or,F.ind,F.cond,F.not,'nCr','nPr','P(B | A)'])};
+});
+
+def('m_terms',1,'Probability vocabulary',()=>{
+  const rows = shuffle([
+    {text:pick(['The probability a student uses Instagram OR TikTok (or both) equals P(Instagram) + P(TikTok) − P(both).','The probability a student has a job OR an internship equals P(job) + P(internship) − P(both).']),ans:'Union',how:'OR events combine into a union.'},
+    {text:pick(['The probability a student has an 8 am class AND works on campus.','The probability a student owns a laptop AND a tablet.']),ans:'Intersection',how:'AND events form an intersection (joint probability).'},
+    {text:pick(['The probability a student does not own a car equals 1 minus the probability a student owns a car.','The probability it does not rain equals 1 minus the probability it rains.']),ans:'Complement',how:'1 − P(A) is the complement.'},
+    {text:pick(['A table lists the probability a student drinks 0, 1, 2, 3, or 4 cups of coffee in a day.','The registrar lists the probability a student enrolls in 12, 13, 14, 15, or 16 credit hours.']),ans:'Discrete Probability Distribution',how:'A list of all possible outcomes with their probabilities.'},
+    {text:pick(['Whether a student has an Android phone has no effect on whether they like pineapple on pizza.','Whether it is raining has no effect on whether a student drinks coffee.']),ans:'Independent Events',how:'One event does not change the probability of the other.'}]);
+  return {kind:'match',title:'Match the Example with the Term',
+    intro:'Match each example to the best term. Some choices will not be used.',
+    rows, bank:shuffle(['Union','Intersection','Complement','Discrete Probability Distribution','Binomial Probability Distribution','Independent Events','Permutation','Empirical Probability','Uniform Distribution'])};
+});
+
+def('m_excel',1,'Choosing the Excel function',()=>{
+  const n=rnd(15,25), k=rnd(4,7), x=rnd(2,4), nb=rnd(8,14), p=pick(['.10','.15','.20','.25']);
+  const lo=rnd(2,3), hi=lo+rnd(2,3), nin=rnd(30,50), z=pick(['1.4','1.8','−0.9','2.1','−1.3']),
+        t=pick([5,10,15]), m=pick([70,75,78,82]), s=pick([6,8,9,10]), zp=pick(['.90','.95','.975']);
+  const all = {
+   'PERMUT':{text:`How many ways can ${k} of ${n} students line up, in order, for a group photo?`,how:'Order matters, so PERMUT(num, num_chosen).'},
+   'COMBIN':{text:`How many ways can ${k} of ${n} students be chosen to attend a conference (order does not matter)?`,how:'Order does not matter, so COMBIN(num, num_chosen).'},
+   'BINOM.DIST':{text:`What is the probability exactly ${x} of ${nb} packages arrive late if each has a ${p} chance of being late?`,how:'An exact count of successes uses BINOM.DIST with false.'},
+   'BINOM.DIST.RANGE':{text:`What is the probability that between ${lo} and ${hi} of ${nb} packages arrive late if each has a ${p} chance of being late?`,how:'A probability between two counts uses BINOM.DIST.RANGE.'},
+   'BINOM.INV':{text:`A professor wants a number of absences she can be 95% confident will not be exceeded among ${nin} students who each have a ${p} chance of being absent.`,how:'"Percent confident that this many or fewer" uses BINOM.INV.'},
+   'NORM.S.DIST':{text:`A student's z-score is ${z}. What is the probability a random student scores below that?`,how:'A z-score to a probability uses NORM.S.DIST with true.'},
+   'NORM.INV':{text:`What exam score marks the top ${t}% of a normally distributed class with a mean of ${m} and a standard deviation of ${s}?`,how:'A probability to an x value, with the mean and standard deviation, uses NORM.INV.'},
+   'NORM.S.INV':{text:`What z-score has ${zp} of the area below it?`,how:'A probability to a z-score uses NORM.S.INV.'}
+  };
+  const names = sample(Object.keys(all),5);
+  const rows = names.map(nm=>({text:all[nm].text,ans:nm,how:all[nm].how}));
+  return {kind:'match',title:'Match the Situation with the Excel Function',
+    intro:'Match each situation to the Excel function you would use. Some choices will not be used.',
+    rows, bank:shuffle(Object.keys(all))};
+});
+
+def('m_dist',1,'Which distribution fits',()=>{
+  const wmax=pick([10,12,15,20]), n=pick([20,25,30]), pp=pick([30,40,45]), mu=pick([46,49,52]), sd=pick([4,5,6]);
+  const rows = shuffle([
+    {text:`A campus shuttle will arrive at some random moment between 0 and ${wmax} minutes after you reach the stop, and every wait length in that window is equally likely.`,ans:'Uniform Distribution',how:'Every value between a minimum and a maximum is equally likely.'},
+    {text:`Each of ${n} randomly chosen students independently has a ${pp}% chance of owning an Apple Watch, and you count how many own one.`,ans:'Binomial Distribution',how:'Fixed trials, two outcomes, independent, same probability each time.'},
+    {text:`Weekly hours of sleep for students are bell-shaped with a mean of ${mu} hours and a standard deviation of ${sd} hours.`,ans:'Standard Normal Distribution',how:'Bell-shaped continuous data: convert to z = (x − μ)/σ.'},
+    {text:'The registrar publishes a table of the probability a student enrolls in 12, 13, 14, 15, 16, 17, or 18 credit hours.',ans:'Discrete Probability Distribution',how:'A list of outcomes and their probabilities.'}]);
+  return {kind:'match',title:'Match the Situation with the Distribution',
+    intro:'Match each situation to the distribution that fits best. Some choices will not be used.',
+    rows, bank:shuffle(['Uniform Distribution','Binomial Distribution','Standard Normal Distribution','Discrete Probability Distribution','Permutation','Combination'])};
+});
+
+def('m_zmulti',1,'Interpreting a z-score',()=>{
+  const ctx = pick([
+    {who:'Weeknight sleep for college students',unit:'hours',mu:6.8,sd:1.2,verb:'slept',lab:'sleep'},
+    {who:'Weekly study time for business students',unit:'hours',mu:14,sd:4,verb:'studied',lab:'study'},
+    {who:'The wait at the campus coffee shop',unit:'minutes',mu:6.5,sd:1.8,verb:'waited',lab:'wait'}]);
+  const z = pick([-2,-1.5,-1.25,-1,-0.75,0.75,1,1.25,1.5,2]);
+  const x = clean(ctx.mu + z*ctx.sd), zz=(x-ctx.mu)/ctx.sd, below=M.cdf(zz);
+  const sign = v => v<0 ? '−'+Math.abs(v).toFixed(2) : '+'+v.toFixed(2);
+  const higher = zz>0;
+  const avgTrue = pick([true,false]);
+  const avgText = avgTrue ? `Student K ${ctx.verb} ${higher?'more':'less'} than the average student.` : `Student K ${ctx.verb} ${higher?'less':'more'} than the average student.`;
+  const opts = shuffle([
+    {text:`Student K's z-score is ${sign(zz)}.`,ans:true,how:`z = (${x} − ${ctx.mu})/${ctx.sd} = ${zz.toFixed(2)}.`},
+    {text:`Student K's z-score is ${sign(-zz)}.`,ans:false,how:'The sign is reversed.'},
+    {text:avgText,ans:avgTrue,how:`A ${higher?'positive':'negative'} z-score means ${higher?'above':'below'} the mean.`},
+    {text:`About ${pctS(below)}% of students are below Student K.`,ans:true,how:`NORM.S.DIST(${zz.toFixed(2)},TRUE) = ${f4(below)}.`},
+    {text:`About ${pctS(1-below)}% of students are above Student K.`,ans:true,how:`1 − NORM.S.DIST(${zz.toFixed(2)},TRUE) = ${f4(1-below)}.`},
+    {text:`About ${pctS(below)}% of students are above Student K.`,ans:false,how:`${pctS(below)}% is the share below, not above.`}]);
+  return {kind:'multi',title:'Choose All That Apply',
+    intro:`${ctx.who} is normally distributed with a mean of ${ctx.mu} ${ctx.unit} and a standard deviation of ${ctx.sd} ${ctx.unit}. Student K ${ctx.verb} ${x} ${ctx.unit}. Select all statements that are correct.`,
+    options:opts};
+});
+
+def('m_binomcond',1,'Binomial requirements',()=>{
+  const valid = [
+   `A ${pick([15,20,25])}-question true/false quiz where a student guesses on every question, and you count the number answered correctly.`,
+   `${pick([12,15,20])} randomly chosen students are each asked if they have a Spotify Premium account (${pick([30,35,40])}% of all students do), and you count how many say yes.`,
+   `A basketball player takes ${pick([10,12,15])} free throws, each with the same ${pick([60,70,75])}% chance of going in, and you count the made shots.`,
+   `A vending machine jams on 6% of purchases, and you count the jams among the next ${pick([30,40])} independent purchases.`,
+   `${pick([8,10,12])} friends each independently have a ${pick([70,80])}% chance of being able to go on a trip, and you count how many can go.`];
+  const invalid = [
+   'You count the number of cups of coffee a student drinks in a day.',
+   'You draw 5 students without replacement from a class of 12 and count the number of seniors.',
+   'You measure the exact number of minutes a student spends on TikTok in a day.',
+   'You record each student\'s class standing (freshman, sophomore, junior, or senior).',
+   'You keep rolling a die until the first six appears and count the rolls.',
+   'You record the weights of 20 randomly chosen backpacks.'];
+  const nv = rnd(2,3);
+  const opts = shuffle([...sample(valid,nv).map(t=>({text:t,ans:true,how:'Fixed number of trials, two outcomes, same probability, independent.'})),
+                        ...sample(invalid,5-nv).map(t=>({text:t,ans:false,how:'Fails at least one binomial requirement (fixed trials, two outcomes, same probability, independence).'}))]);
+  return {kind:'multi',title:'Choose All That Apply',
+    intro:'Which of the following situations satisfy all the requirements of a binomial probability distribution?',options:opts};
+});
+
+/* ---------- PART 2: PROBABILITY RULES ---------- */
+def('r_indep2',2,'AND, OR, NOT with independent events',()=>{
+  const sc = pick([
+    ['checks Instagram before 9 am','checks TikTok before 9 am','Instagram','TikTok'],
+    ['streams on Netflix tonight','streams on Hulu tonight','Netflix','Hulu'],
+    ['orders coffee in the morning','orders an energy drink in the afternoon','coffee','an energy drink'],
+    ['listens to Spotify while studying','listens to a podcast while studying','Spotify','a podcast']]);
+  const pa=pick([.3,.4,.5,.6,.7,.8]), pb=pick([.2,.25,.3,.35,.4,.45,.5,.55]);
+  const j=pa*pb, u=pa+pb-j;
+  return {kind:'parts',title:'Independent Events',
+    intro:`The probability a student ${sc[0]} is ${fp(pa)}. The probability a student ${sc[1]} is ${fp(pb)}. Assume the two events are independent.`,
+    items:[
+     N('A',`What is the probability a student does both?`,j,{how:`P(A ∩ B) = ${fp(pa)} × ${fp(pb)}`}),
+     N('B',`What is the probability a student does ${sc[2]} or ${sc[3]} (or both)?`,u,{how:`P(A ∪ B) = ${fp(pa)} + ${fp(pb)} − ${f4(j)}`}),
+     N('C',`What is the probability a student does neither?`,(1-pa)*(1-pb),{how:`(1 − ${fp(pa)})(1 − ${fp(pb)}), or 1 − ${f4(u)}`}),
+     N('D',`What is the probability a student does ${sc[2]} but not ${sc[3]}?`,pa*(1-pb),{how:`${fp(pa)} × (1 − ${fp(pb)})`})]};
+});
+
+def('r_union',2,'Union, complement, and conditional',()=>{
+  const sc = pick([['has a part-time job','has an internship'],['plays an intramural sport','works out at the rec center'],['takes a night class','takes an online class'],['has a meal plan','has a parking permit']]);
+  const pa=pick([.3,.4,.5,.6]), pb=pick([.15,.2,.25,.3,.35]);
+  let jt=[]; for(let v=0.04; v<=Math.min(pa,pb)-0.02+1e-9; v+=0.01) if(Math.abs(v-pa*pb)>0.004) jt.push(+v.toFixed(2));
+  const j = pick(jt), u=pa+pb-j;
+  return {kind:'parts',title:'Two Events with a Known Overlap',
+    intro:`On a campus, the probability a student ${sc[0]} is ${fp(pa)}, the probability a student ${sc[1]} is ${fp(pb)}, and the probability a student does both is ${fp(j)}.`,
+    items:[
+     N('A','What is the probability a student does at least one of the two?',u,{how:`${fp(pa)} + ${fp(pb)} − ${fp(j)}`}),
+     N('B',`What is the probability a student ${sc[0]} but does not ${sc[1].replace(/^has /,'have ').replace(/^plays /,'play ').replace(/^works /,'work ').replace(/^takes /,'take ')}?`,pa-j,{how:`${fp(pa)} − ${fp(j)}`}),
+     N('C','What is the probability a student does neither?',1-u,{how:`1 − ${f4(u)}`}),
+     N('D',`What is the probability a student ${sc[1]} given that they ${sc[0].replace(/^has /,'have ').replace(/^plays /,'play ').replace(/^works /,'work ').replace(/^takes /,'take ')}?`,j/pa,{how:`P(B|A) = ${fp(j)} / ${fp(pa)}`})]};
+});
+
+def('r_table',2,'Two-way table: joint and conditional',()=>{
+  const indep = Math.random()<0.34;
+  let a,b,c,d;
+  if (indep){ const s=pick([20,30,40]), t=pick([10,20,30]), u=pick([3,4,5]), v=pick([1,2,3]); a=s*u; b=s*v; c=t*u; d=t*v; if(u===v){ b=s*(v+1); d=t*(v+1);} }
+  else { a=rnd(20,40)*10; b=rnd(3,9)*10; c=rnd(6,12)*10; d=rnd(10,18)*10; if(a*d===b*c) a+=10; }
+  const T=a+b+c+d;
+  const ctx = pick([
+    {r:['Lives on campus','Lives off campus'],c:['Meal plan','No meal plan'],rs:'lives on campus',cs:'has a meal plan',cn:'has no meal plan'},
+    {r:['Business major','Other major'],c:['Owns a laptop','No laptop'],rs:'is a business major',cs:'owns a laptop',cn:'does not own a laptop'},
+    {r:['Freshman','Upperclassman'],c:['Attends games','Skips games'],rs:'is a freshman',cs:'attends football games',cn:'skips football games'}]);
+  const isInd = a*d===b*c;
+  return {kind:'parts',title:'Reading a Two-Way Table',
+    intro:`A survey of ${T} students recorded two things about each student.`,
+    table:{head:['',ctx.c[0],ctx.c[1],'Total'],rows:[[ctx.r[0],a,b,a+b],[ctx.r[1],c,d,c+d],['Total',a+c,b+d,T]]},
+    items:[
+     N('A',`What is the probability a student ${ctx.cs}?`,(a+c)/T,{how:`${a+c} / ${T}`}),
+     N('B',`What is the probability a student ${ctx.rs} and ${ctx.cs}?`,a/T,{how:`${a} / ${T}`}),
+     N('C',`What is the probability a student ${ctx.cs} given that they ${ctx.rs.replace(/^is /,'are ').replace(/^lives /,'live ')}?`,a/(a+b),{how:`${a} / ${a+b} (only the first row counts)`}),
+     N('D',`What is the probability a student ${ctx.rs} given that they ${ctx.cn.replace(/^has /,'have ').replace(/^owns /,'own ').replace(/^does /,'do ').replace(/^attends /,'attend ').replace(/^skips /,'skip ')}?`,b/(b+d),{how:`${b} / ${b+d} (only the second column counts)`}),
+     CH('E',`Are the two characteristics independent?`,['Independent','Not independent'],isInd?0:1,{how:`Compare P(${ctx.cs}) = ${f4((a+c)/T)} with P(${ctx.cs} | ${ctx.rs}) = ${f4(a/(a+b))}. They are ${isInd?'equal':'different'}.`})]};
+});
+
+def('r_condjoint',2,'Rule of multiplication',()=>{
+  const pu=pick([.5,.6,.7]), pn=pick([.6,.7,.8,.9]), n=pick([200,300,400,500,800]);
+  const sc=pick([['use the Canvas mobile app','turn on notifications','uses the app','has notifications on'],['use the library study rooms','book them online','uses the study rooms','books online'],['own a smartwatch','track their sleep with it','owns a smartwatch','tracks sleep']]);
+  return {kind:'parts',title:'Conditional Joint Probability',
+    intro:`${Math.round(pu*100)}% of students ${sc[0]}. Of the students who do, ${Math.round(pn*100)}% ${sc[1]}.`,
+    items:[
+     N('A',`What is the probability a random student ${sc[2]} and ${sc[3]}?`,pu*pn,{how:`P(A) × P(B|A) = ${fp(pu)} × ${fp(pn)}`}),
+     N('B',`What is the probability a random student ${sc[2]} but does not ${sc[3].replace(/^has /,'have ').replace(/^tracks/,'track')}?`,pu*(1-pn),{how:`${fp(pu)} × (1 − ${fp(pn)})`}),
+     N('C',`What is the probability a random student does not do the first thing (${sc[0].replace(/^use/,'use').replace(/^own/,'own')})?`,1-pu,{how:`1 − ${fp(pu)}`}),
+     N('D',`Out of ${n} randomly chosen students, how many would you expect to ${sc[0]} and ${sc[1]}?`,n*pu*pn,{tol:CNT,dp:1,how:`${n} × ${f4(pu*pn)}`})]};
+});
+
+def('r_three',2,'Three overlapping groups (harder)',()=>{
+  const names = pick([['Instagram','TikTok','Snapchat'],['Netflix','Hulu','Disney+'],['Spotify','Apple Music','YouTube Music']]);
+  const r = ()=>rnd(6,14)*10, q=()=>rnd(3,9)*10;
+  const oI=r(), oT=r(), oS=r()-20, IT=q(), IS=q(), TS=q(), all=rnd(2,6)*10, none=rnd(4,12)*10;
+  const IG=oI+IT+IS+all, TT=oT+IT+TS+all, SC=oS+IS+TS+all, n=oI+oT+oS+IT+IS+TS+all+none;
+  const [A,B,C]=names;
+  return {kind:'parts',title:'Three Overlapping Groups',
+    intro:`A survey of ${n} students found the following.`,
+    table:{head:['Group','Number of students'],rows:[[`${A}`,IG],[`${B}`,TT],[`${C}`,SC],[`${A} and ${B}`,IT+all],[`${A} and ${C}`,IS+all],[`${B} and ${C}`,TS+all],['All three',all]]},
+    hint:'Tip: start with the "all three" overlap and subtract it from each pairwise overlap to fill in a Venn diagram.',
+    items:[
+     N('A',`What is the probability a randomly selected student uses ${A} or ${B}?`,(IG+TT-IT-all)/n,{how:`(${IG} + ${TT} − ${IT+all}) / ${n}`}),
+     N('B',`What is the probability a student uses exactly one of the three?`,(oI+oT+oS)/n,{how:`Only ${A} ${oI}, only ${B} ${oT}, only ${C} ${oS}: ${oI+oT+oS} / ${n}`}),
+     N('C',`What is the probability a student uses at least two of the three?`,(IT+IS+TS+all)/n,{how:`Exactly two: ${IT}+${IS}+${TS} = ${IT+IS+TS}, plus all three ${all}: ${IT+IS+TS+all} / ${n}`}),
+     N('D',`What is the probability a student uses none of the three?`,none/n,{how:`${n} − (everyone in at least one group) = ${none}; ${none} / ${n}`})]};
+});
+
+def('r_indep3',2,'At least one of several independent events',()=>{
+  const p=pick([.1,.15,.2,.25,.3]), k=pick([3,4]);
+  const ctxs=[[`Three professors each independently have a ${Math.round(p*100)}% chance of canceling their Friday class on any given week.`,'cancel','all three cancel','none of them cancel','at least one cancels','exactly one cancels',3],
+              [`Three roommates each independently have a ${Math.round(p*100)}% chance of forgetting to take out the trash on a given week.`,'forget','all three forget','none of them forget','at least one forgets','exactly one forgets',3]];
+  const c=pick(ctxs);
+  return {kind:'parts',title:'Several Independent Events',intro:c[0],
+    items:[
+     N('A',`What is the probability ${c[2]}?`,Math.pow(p,3),{tol:PR,how:`${fp(p)} × ${fp(p)} × ${fp(p)}`}),
+     N('B',`What is the probability ${c[3]}?`,Math.pow(1-p,3),{how:`(1 − ${fp(p)})³`}),
+     N('C',`What is the probability ${c[4]}?`,1-Math.pow(1-p,3),{how:`Complement rule: 1 − P(none) = 1 − ${f4(Math.pow(1-p,3))}`}),
+     N('D',`What is the probability ${c[5]}?`,3*p*Math.pow(1-p,2),{how:`3 ways × ${fp(p)} × (1 − ${fp(p)})². Excel: BINOM.DIST(1,3,${p},FALSE)`})]};
+});
+
+def('r_without',2,'Drawing without replacement',()=>{
+  const nn=rnd(8,14), k=rnd(3,5), who=pick(['seniors','athletes','sophomores','transfer students']);
+  const a=k/nn, a2=(k-1)/(nn-1), nk=nn-k;
+  return {kind:'parts',title:'Choosing Without Replacement',
+    intro:`A group chat has ${nn} people, and ${k} of them are ${who}. Two people are chosen one after another at random, without replacement, to plan a party.`,
+    items:[
+     N('A',`What is the probability both chosen are ${who}?`,a*a2,{how:`(${k}/${nn})(${k-1}/${nn-1})`}),
+     N('B',`What is the probability the first is one of the ${who} and the second is not?`,a*(nk/(nn-1)),{how:`(${k}/${nn})(${nk}/${nn-1})`}),
+     N('C',`What is the probability neither is one of the ${who}?`,(nk/nn)*((nk-1)/(nn-1)),{how:`(${nk}/${nn})(${nk-1}/${nn-1})`}),
+     N('D',`What is the probability at least one is one of the ${who}?`,1-(nk/nn)*((nk-1)/(nn-1)),{how:`Complement rule: 1 − P(neither)`})]};
+});
+
+def('r_bayes',2,'Reverse conditional probability (harder)',()=>{
+  const pa=pick([.3,.4,.5,.6]), pyA=pick([.8,.85,.9]), pyN=pick([.5,.55,.6,.65]);
+  const j1=pa*pyA, j2=(1-pa)*pyN, py=j1+j2;
+  return {kind:'parts',title:'Review Sessions',
+    intro:`${Math.round(pa*100)}% of students attend the review session before an exam. Of the students who attend, ${Math.round(pyA*100)}% pass the exam. Of the students who do not attend, ${Math.round(pyN*100)}% pass the exam.`,
+    hint:'Tip: picture 1,000 students and fill in a table of counts.',
+    items:[
+     N('A','What is the probability a random student attends the review session and passes?',j1,{how:`${fp(pa)} × ${fp(pyA)}`}),
+     N('B','What is the probability a random student does not attend and passes?',j2,{how:`(1 − ${fp(pa)}) × ${fp(pyN)}`}),
+     N('C','What is the probability a random student passes the exam?',py,{how:`${f4(j1)} + ${f4(j2)}`}),
+     N('D','Given that a student passed, what is the probability they attended the review session?',j1/py,{how:`${f4(j1)} / ${f4(py)}. With 1,000 students: ${Math.round(j1*1000)} attended and passed out of ${Math.round(py*1000)} who passed.`})]};
+});
+
+def('r_indcheck',2,'Testing for independence',()=>{
+  const ctxs = shuffle([
+    ['P(arrive late to class)','P(it is raining)'],['P(uses Instagram)','P(uses TikTok)'],['P(drinks coffee)','P(plays intramurals)'],
+    ['P(owns a car)','P(lives off campus)'],['P(has a job)','P(has a scholarship)'],['P(streams Netflix)','P(streams Hulu)']]).slice(0,3);
+  const kinds = shuffle([true,false,Math.random()<0.5]);
+  const items = ctxs.map((cx,i)=>{
+    const pa=pick([.2,.3,.4,.5,.6]), pb=pick([.2,.3,.4,.5]);
+    const prod=+(pa*pb).toFixed(2); let j=prod;
+    if(!kinds[i]){ const opts=[.04,.05,-.04,-.03].map(d=>+(prod+d).toFixed(2)).filter(v=>v>0.01 && v<=Math.min(pa,pb)); j=pick(opts.length?opts:[+(prod+0.04).toFixed(2)]); }
+    const ind = Math.abs(j-prod)<1e-9;
+    return CH('ABC'[i],`${cx[0]} = ${fp(pa)}, ${cx[1]} = ${fp(pb)}, P(both) = ${fp(j)}`,['Independent','Not independent'],ind?0:1,
+      {how:`P(A) × P(B) = ${fp(pa)} × ${fp(pb)} = ${fp(prod)}. P(both) is ${fp(j)}, so the events are ${ind?'independent':'not independent'}.`});
+  });
+  return {kind:'parts',title:'Independent or Not?',intro:'For each pair of events, decide whether the events are independent.',items};
+});
+
+/* ---------- PART 3: COUNTING ---------- */
+def('c_mult',3,'Multiplication formula',()=>{
+  const sc = pick([
+    {shop:'A campus coffee shop',a:'drinks',b:'sizes',c:'milk options',extra:'flavor shots',usual:'usual order',spec:'a particular drink'},
+    {shop:'A build-your-own pizza place',a:'crusts',b:'sizes',c:'sauces',extra:'cheeses',usual:'usual pizza',spec:'a particular crust'},
+    {shop:'A custom phone-case site',a:'phone models',b:'colors',c:'patterns',extra:'finishes',usual:'dream case',spec:'a particular phone model'}]);
+  const a=rnd(4,8), b=rnd(3,4), c=rnd(3,5), f=rnd(3,6), t=a*b*c;
+  return {kind:'parts',title:'Counting Orders',
+    intro:`${sc.shop} offers ${a} ${sc.a}, ${b} ${sc.b}, and ${c} ${sc.c}.`,
+    items:[
+     N('A',`How many different combinations (${sc.a}, ${sc.b}, and ${sc.c}) are possible?`,t,{tol:INT,dp:0,how:`${a} × ${b} × ${c}`}),
+     N('B',`If the shop adds ${f} ${sc.extra} to choose from, how many different combinations are possible now?`,t*f,{tol:INT,dp:0,how:`${t} × ${f}`}),
+     N('C',`If you order completely at random from the original menu, what is the probability you get your exact ${sc.usual}?`,1/t,{tol:SM,how:`1 / ${t}. You may enter a fraction.`}),
+     N('D',`How many of the original combinations include ${sc.spec}?`,b*c,{tol:INT,dp:0,how:`Fix that choice, then ${b} × ${c}`})]};
+});
+
+def('c_perm',3,'Permutations',()=>{
+  const k=pick([3,4]), n=rnd(10,16), offices=['President','Vice President','Treasurer','Secretary'].slice(0,k);
+  const P=M.perm(n,k);
+  return {kind:'parts',title:'Student Org Elections',
+    intro:`A student organization with ${n} members elects a ${offices.slice(0,-1).join(', ')}, and ${offices[k-1]}. No member can hold more than one office.`,
+    items:[
+     N('A','How many different ways can the offices be filled?',P,{tol:INT,dp:0,how:`Order matters. =PERMUT(${n},${k})`}),
+     N('B','What is the probability that one specific arrangement (one exact set of officers in their exact offices) occurs by random selection?',1/P,{tol:SM,how:`1 / ${nf(P)}. You may enter a fraction.`}),
+     N('C','What is the probability you are randomly chosen as President?',1/n,{how:`1 / ${n}`}),
+     N('D','What is the probability you are chosen as President and your best friend is chosen as Vice President?',1/(n*(n-1)),{tol:SM,how:`(1/${n})(1/${n-1}) = 1/${n*(n-1)}`})]};
+});
+
+def('c_comb',3,'Combinations',()=>{
+  const n=rnd(15,22), k=pick([4,5]), C=M.comb(n,k);
+  return {kind:'parts',title:'Focus Group',
+    intro:`A marketing professor randomly selects ${k} of the ${n} students in a class for a focus group.`,
+    items:[
+     N('A','How many different focus groups are possible?',C,{tol:INT,dp:0,how:`Order does not matter. =COMBIN(${n},${k})`}),
+     N('B','What is the probability that one specific group is selected?',1/C,{tol:SM,how:`1 / ${nf(C)}. You may enter a fraction.`}),
+     N('C','What is the probability that you are selected?',k/n,{how:`=COMBIN(${n-1},${k-1})/COMBIN(${n},${k}) = ${k}/${n}`}),
+     N('D','What is the probability that you and your best friend are both selected?',M.comb(n-2,k-2)/C,{how:`=COMBIN(${n-2},${k-2})/COMBIN(${n},${k}) = ${nf(M.comb(n-2,k-2))}/${nf(C)}`})]};
+});
+
+def('c_raffle',3,'Ordered or unordered winners',()=>{
+  const N0=pick([25,30,40,50,60]), sc=pick([['raffle at a campus event','a gift card, a hoodie, and game tickets'],['giveaway at a football game','a jersey, a signed ball, and tickets']]);
+  return {kind:'parts',title:'Raffle',
+    intro:`${N0} students enter a ${sc[0]}.`,
+    items:[
+     N('A',`There are 3 different prizes (${sc[1]}) and no one can win more than one. How many ways can the prizes be awarded?`,M.perm(N0,3),{tol:INT,dp:0,how:`Different prizes means order matters. =PERMUT(${N0},3)`}),
+     N('B','If instead the 3 prizes are identical $10 gift cards, how many different groups of 3 winners are possible?',M.comb(N0,3),{tol:INT,dp:0,how:`Order does not matter. =COMBIN(${N0},3)`}),
+     N('C','In the identical-prize raffle, what is the probability you are one of the 3 winners?',3/N0,{how:`=COMBIN(${N0-1},2)/COMBIN(${N0},3) = 3/${N0}`}),
+     N('D','In the different-prize raffle, what is the probability you win the first prize listed?',1/N0,{how:`1 / ${N0}`})]};
+});
+
+/* ---------- PART 4: DISCRETE DISTRIBUTIONS ---------- */
+function randUnits(total,parts,lo,hi){
+  for(let tries=0;tries<500;tries++){
+    const a=[]; let left=total;
+    for(let i=0;i<parts;i++){ const rem=parts-i-1; const mn=Math.max(lo,left-hi*rem), mx=Math.min(hi,left-lo*rem); if(mn>mx){a.length=0;break;} const v=rnd(mn,mx); a.push(v); left-=v; }
+    if(a.length===parts && left===0) return shuffle(a).map(u=>u/20);
+  }
+  return [.1,.25,.3,.2,.1,.05];
+}
+function dstats(vals,probs){ const mu=vals.reduce((s,v,i)=>s+v*probs[i],0); const va=vals.reduce((s,v,i)=>s+probs[i]*(v-mu)*(v-mu),0); return {mu,va,sd:Math.sqrt(va)}; }
+const DCTX = [
+  {noun:'cups of coffee a student drinks in a day',col:'Cups',vals:[0,1,2,3,4,5],unit:'cups'},
+  {noun:'classes a student misses in a semester',col:'Classes missed',vals:[0,1,2,3,4,5],unit:'classes'},
+  {noun:'deliveries a DoorDash driver makes in one hour',col:'Deliveries',vals:[0,1,2,3,4,5],unit:'deliveries'},
+  {noun:'Amazon packages a student receives in a week',col:'Packages',vals:[0,1,2,3,4,5],unit:'packages'},
+  {noun:'streaming shows a student binges in a weekend',col:'Shows',vals:[0,1,2,3,4,5],unit:'shows'}];
+
+def('d_table',4,'Mean and standard deviation of a discrete distribution',()=>{
+  const c=pick(DCTX), pr=randUnits(20,6,1,7), s=dstats(c.vals,pr), k=rnd(1,3), m=rnd(3,4);
+  return {kind:'parts',title:'Reading a Probability Table',
+    intro:`The table shows the number of ${c.noun}.`,
+    table:{head:[c.col,'Probability'],rows:c.vals.map((v,i)=>[v,pr[i].toFixed(2)])},
+    items:[
+     N('A','What is the mean?',s.mu,{tol:{abs:0.01},dp:4,how:'μ = Σ n·P(n). In Excel: =SUMPRODUCT(values, probabilities)'}),
+     N('B','What is the standard deviation?',s.sd,{tol:{abs:0.01},dp:4,how:`σ² = Σ P(n)(n − μ)² = ${f4(s.va)}, so σ = ${f4(s.sd)}`}),
+     N('C',`What is the probability of exactly ${k}?`,pr[k],{how:'Read it straight from the table.'}),
+     N('D',`What is the probability of ${m} or more?`,pr.slice(m).reduce((a,b)=>a+b,0),{how:`Add the probabilities for ${c.vals.slice(m).join(', ')}.`})]};
+});
+
+def('d_missing',4,'Finding a missing probability',()=>{
+  const c=pick(DCTX), pr=randUnits(20,6,1,7), hid=rnd(1,4), s=dstats(c.vals,pr), j=rnd(2,3);
+  return {kind:'parts',title:'One Probability Is Missing',
+    intro:`The table shows the number of ${c.noun}. One probability is missing.`,
+    table:{head:[c.col,'Probability'],rows:c.vals.map((v,i)=>[v,i===hid?'?':pr[i].toFixed(2)])},
+    items:[
+     N('A',`What is the probability of ${c.vals[hid]}?`,pr[hid],{how:`The probabilities must sum to 1: 1 − (the other five) = ${f2(pr[hid])}`}),
+     N('B','What is the mean?',s.mu,{tol:{abs:0.01},how:'μ = Σ n·P(n)'}),
+     N('C','What is the standard deviation?',s.sd,{tol:{abs:0.01},how:`σ² = Σ P(n)(n − μ)² = ${f4(s.va)}`}),
+     N('D',`What is the probability of more than ${j}?`,pr.slice(j+1).reduce((a,b)=>a+b,0),{how:`Add the probabilities for ${c.vals.slice(j+1).join(', ')}.`})]};
+});
+
+def('d_valid',4,'Valid probability distributions',()=>{
+  const kinds = shuffle(['valid','low','high','neg']).slice(0,3);
+  if(!kinds.includes('valid')) kinds[rnd(0,2)]='valid';
+  const items = kinds.map((kd,i)=>{
+    let u;
+    if(kd==='valid') u=randUnits(20,4,1,10).map(v=>Math.round(v*20));
+    else if(kd==='low') u=randUnits(19,4,1,10).map(v=>Math.round(v*20)); // randUnits divides by 20; total 19 handled below
+    else if(kd==='high') u=randUnits(21,4,1,10).map(v=>Math.round(v*20));
+    else { const t=randUnits(21,3,1,12).map(v=>Math.round(v*20)); u=[...t,-1]; }
+    const pr=u.map(v=>v/20), sum=pr.reduce((a,b)=>a+b,0);
+    const bad = kd!=='valid';
+    const why = kd==='valid' ? 'Every probability is between 0 and 1 and they sum to 1.00.' :
+                kd==='neg' ? 'A probability cannot be negative (the sum can still equal 1.00).' :
+                `The probabilities sum to ${sum.toFixed(2)}, not 1.00.`;
+    const tbl = `<table class="data"><tr><th>Meetings</th><th>0</th><th>1</th><th>2</th><th>3</th></tr><tr><td>Probability</td>${pr.map(p=>`<td>${p<0?'−'+Math.abs(p).toFixed(2):p.toFixed(2)}</td>`).join('')}</tr></table>`;
+    return Object.assign(CH('ABC'[i],`Table ${i+1}`,['Valid','Not valid'],bad?1:0,{how:why}),{pre:tbl});
+  });
+  return {kind:'parts',title:'Valid Distributions?',
+    intro:'Each table claims to be a discrete probability distribution for the number of group-project meetings a team holds in a week. Decide whether each table is a valid distribution.',items};
+});
+
+def('d_game',4,'Expected value of a game',()=>{
+  const cost=pick([2,3,4]), x1=pick([1,2,3]), x2=pick([4,5,6,8]), x3=pick([10,15,20,25]);
+  const p0=pick([10,11,12,13]), p3=1, p2=rnd(1,2), p1=20-p0-p3-p2;
+  const vals=[0,x1,x2,x3], pr=[p0,p1,p2,p3].map(u=>u/20), s=dstats(vals,pr);
+  const game = pick(['a spin wheel','a ring toss','a prize drawer']);
+  return {kind:'parts',title:'Carnival Game',
+    intro:`At a campus carnival, ${game} costs $${cost} to play. A play pays out as shown.`,
+    table:{head:['Payout','Probability'],rows:vals.map((v,i)=>['$'+v,pr[i].toFixed(2)])},
+    items:[
+     N('A','What is the mean payout per play (in dollars)?',s.mu,{tol:{abs:0.01},how:'μ = Σ n·P(n)'}),
+     N('B','What is the expected net result per play after paying the cost (in dollars, negative if you lose money)?',s.mu-cost,{tol:{abs:0.01},neg:true,how:`${f2(s.mu)} − ${cost}`}),
+     N('C','What is the standard deviation of the payout (in dollars)?',s.sd,{tol:{abs:0.01},how:`σ² = Σ P(n)(n − μ)² = ${f4(s.va)}`}),
+     N('D','What is the probability a player wins something (a payout greater than $0)?',1-pr[0],{how:`1 − ${f2(pr[0])}`})]};
+});
+
+/* ---------- PART 5: BINOMIAL ---------- */
+def('b_basic',5,'Binomial probabilities',()=>{
+  const sc = pick([
+    {text:(n,p)=>`${Math.round(p*100)}% of students at a university own an Apple Watch. A researcher randomly selects ${n} students.`,ev:'own an Apple Watch'},
+    {text:(n,p)=>`${Math.round(p*100)}% of students at a university have a part-time job. A researcher randomly selects ${n} students.`,ev:'have a part-time job'},
+    {text:(n,p)=>`A campus survey finds ${Math.round(p*100)}% of students use ChatGPT weekly. You randomly sample ${n} students.`,ev:'use ChatGPT weekly'}]);
+  const n=rnd(15,30), p=pick([.2,.25,.3,.35,.4,.45]), m=Math.round(n*p), k1=m, k2=m-2, k3=m+2, lo=m-2, hi=m+2;
+  const sd=Math.sqrt(n*p*(1-p));
+  return {kind:'parts',title:'Binomial Probabilities',intro:sc.text(n,p),
+    items:[
+     N('A',`What is the probability exactly ${k1} ${sc.ev}?`,M.bpmf(n,p,k1),{how:`=BINOM.DIST(${k1},${n},${p},FALSE)`}),
+     N('B',`What is the probability at most ${k2} ${sc.ev}?`,M.bcdf(n,p,k2),{how:`=BINOM.DIST(${k2},${n},${p},TRUE)`}),
+     N('C',`What is the probability at least ${k3} ${sc.ev}?`,1-M.bcdf(n,p,k3-1),{how:`=1-BINOM.DIST(${k3-1},${n},${p},TRUE)`}),
+     N('D',`What is the probability between ${lo} and ${hi} students (inclusive) ${sc.ev}?`,M.bcdf(n,p,hi)-M.bcdf(n,p,lo-1),{how:`=BINOM.DIST.RANGE(${n},${p},${lo},${hi})`}),
+     N('E','What is the standard deviation of the number of students?',sd,{tol:{abs:0.01},how:`σ² = nπ(1−π) = ${f4(n*p*(1-p))}, so σ = ${f4(sd)}`})]};
+});
+
+def('b_inv',5,'Binomial: mean and confidence cutoffs',()=>{
+  const sc=pick([
+    {t:(n,p)=>`On any given day, each student in a ${n}-student class independently has a ${Math.round(p*100)}% chance of being absent.`,w:'absent',cut:'absences'},
+    {t:(n,p)=>`A batch of ${n} Blu-ray discs is shipped to a store. Each disc independently has a ${Math.round(p*100)}% chance of being defective.`,w:'defective',cut:'defective discs'},
+    {t:(n,p)=>`A restaurant takes ${n} reservations. Each party independently has a ${Math.round(p*100)}% chance of being a no-show.`,w:'no-shows',cut:'no-shows'}]);
+  const n=pick([30,40,50,60]), p=pick([.05,.08,.1,.12]), k=Math.round(n*p), x95=M.binv(n,p,.95), x99=M.binv(n,p,.99);
+  return {kind:'parts',title:'Binomial and Confidence Cutoffs',intro:sc.t(n,p),
+    items:[
+     N('A',`What is the mean number of ${sc.w}?`,n*p,{tol:{abs:0.01},how:`μ = nπ = ${n} × ${p}`}),
+     N('B',`What is the probability exactly ${k} are ${sc.w}?`,M.bpmf(n,p,k),{how:`=BINOM.DIST(${k},${n},${p},FALSE)`}),
+     N('C',`What number of ${sc.cut} can you be 95% confident will not be exceeded (95% confident that this many or fewer will occur)?`,x95,{tol:{abs:0.001},dp:0,how:`=BINOM.INV(${n},${p},0.95) = ${x95}`}),
+     N('D',`What number of ${sc.cut} can you be 99% confident will not be exceeded?`,x99,{tol:{abs:0.001},dp:0,how:`=BINOM.INV(${n},${p},0.99) = ${x99}`})]};
+});
+
+def('b_small',5,'Binomial with a small number of trials',()=>{
+  const sc=pick([
+    {t:(n,p)=>`${n} friends are planning a spring break trip. Each friend independently has a ${Math.round(p*100)}% chance of being able to go.`,w:'can go'},
+    {t:(n,p)=>`A student org needs ${n} volunteers for an event. Each volunteer independently has a ${Math.round(p*100)}% chance of showing up.`,w:'show up'},
+    {t:(n,p)=>`${n} teammates each independently have a ${Math.round(p*100)}% chance of finishing their part of a group project on time.`,w:'finish on time'}]);
+  const n=rnd(5,8), p=pick([.7,.75,.8,.85]), k=n-2;
+  return {kind:'parts',title:'Small-Group Binomial',intro:sc.t(n,p),
+    items:[
+     N('A',`What is the probability all ${n} ${sc.w}?`,Math.pow(p,n),{how:`=BINOM.DIST(${n},${n},${p},FALSE)`}),
+     N('B',`What is the probability exactly ${k} ${sc.w}?`,M.bpmf(n,p,k),{how:`=BINOM.DIST(${k},${n},${p},FALSE)`}),
+     N('C',`What is the probability at least ${n-1} ${sc.w}?`,1-M.bcdf(n,p,n-2),{how:`=1-BINOM.DIST(${n-2},${n},${p},TRUE)`}),
+     N('D',`What is the probability none ${sc.w==='can go'?'can go':sc.w}?`,Math.pow(1-p,n),{how:`=BINOM.DIST(0,${n},${p},FALSE)`})]};
+});
+
+/* ---------- PART 6: NORMAL ---------- */
+const NCTX = [
+  {noun:'Weekly study time for business students',unit:'hours',mu:[12,14,16],sd:[3,4,5],verb:'studies'},
+  {noun:'The length of a gym visit at the campus rec center',unit:'minutes',mu:[55,60,62,65],sd:[8,10,12,14],verb:'works out for'},
+  {noun:'Concession spending per moviegoer',unit:'dollars',mu:[16,18,20,22],sd:[4,5,6],verb:'spends'},
+  {noun:'Daily Spotify listening time for students',unit:'minutes',mu:[120,135,145,150],sd:[30,35,40],verb:'listens for'},
+  {noun:'Scores on a statistics exam',unit:'points',mu:[72,75,78,80],sd:[8,9,10],verb:'scores'}];
+const money = (u,x)=> u==='dollars' ? '$'+(Math.round(x*100)/100) : ''+(Math.round(x*100)/100);
+const withUnit = (u,x)=> u==='dollars' ? '$'+clean(x) : clean(x)+' '+u;
+
+def('n_basic',6,'z-scores and normal probabilities',()=>{
+  const c=pick(NCTX), mu=pick(c.mu), sd=pick(c.sd);
+  const z1=pick([-2,-1.5,-1.25,-1]), z2=pick([1,1.25,1.5,2]);
+  const x1=clean(mu+z1*sd), x2=clean(mu+z2*sd);
+  const pl=M.cdf(z1), pg=1-M.cdf(z2), pb=M.cdf(z2)-M.cdf(z1);
+  return {kind:'parts',title:'Normal Probabilities',
+    intro:`${c.noun} is normally distributed with a mean of ${withUnit(c.unit,mu)} and a standard deviation of ${withUnit(c.unit,sd)}.`,
+    items:[
+     N('A',`What is the z-score for a value of ${withUnit(c.unit,x1)}?`,z1,{tol:{abs:0.01},neg:true,how:`z = (${x1} − ${mu}) / ${sd}`}),
+     N('B',`What is the z-score for a value of ${withUnit(c.unit,x2)}?`,z2,{tol:{abs:0.01},neg:true,how:`z = (${x2} − ${mu}) / ${sd}`}),
+     N('C',`What is the probability a value is less than ${withUnit(c.unit,x1)}?`,pl,{tol:PRZ,how:`=NORM.S.DIST(${z1},TRUE)`}),
+     N('D',`What is the probability a value is more than ${withUnit(c.unit,x2)}?`,pg,{tol:PRZ,how:`=1-NORM.S.DIST(${z2},TRUE)`}),
+     N('E',`What is the probability a value is between ${withUnit(c.unit,x1)} and ${withUnit(c.unit,x2)}?`,pb,{tol:PRZ,how:`=NORM.S.DIST(${z2},TRUE)-NORM.S.DIST(${z1},TRUE)`})]};
+});
+
+def('n_inv',6,'Cutoffs and expected counts',()=>{
+  const c=pick(NCTX), mu=pick(c.mu), sd=pick(c.sd);
+  const t=pick([5,10,15,20,25]), b=pick([5,10,15]), zx=pick([1,1.25,1.5,2]), x=clean(mu+zx*sd), zy=pick([-1.25,-1,-1.5,-2]), y=clean(mu+zy*sd), cnt=pick([200,220,250,300,400]);
+  const topV=M.inv(1-t/100)*sd+mu, botV=M.inv(b/100)*sd+mu, pgx=1-M.cdf(zx), ply=M.cdf(zy);
+  return {kind:'parts',title:'Percentiles and Counts',
+    intro:`${c.noun} is normally distributed with a mean of ${withUnit(c.unit,mu)} and a standard deviation of ${withUnit(c.unit,sd)}.`,
+    items:[
+     N('A',`What value (in ${c.unit}) marks the top ${t}%?`,topV,{tol:{abs:0.05},how:`=NORM.INV(${(1-t/100).toFixed(2)},${mu},${sd}) = ${f2(topV)}`}),
+     N('B',`What value (in ${c.unit}) marks the bottom ${b}%?`,botV,{tol:{abs:0.05},how:`=NORM.INV(${(b/100).toFixed(2)},${mu},${sd}) = ${f2(botV)}`}),
+     N('C',`What proportion of values are ${withUnit(c.unit,x)} or higher?`,pgx,{tol:PRZ,how:`z = ${zx}; =1-NORM.S.DIST(${zx},TRUE)`}),
+     N('D',`Out of ${cnt} observations, how many would you expect to be below ${withUnit(c.unit,y)}?`,cnt*ply,{tol:CNT,dp:1,how:`z = ${zy}; =NORM.S.DIST(${zy},TRUE) = ${f4(ply)}; ${cnt} × ${f4(ply)} = ${f2(cnt*ply)}`})]};
+});
+
+def('n_compare',6,'Comparing z-scores',()=>{
+  const pair=pick([['statistics','economics'],['accounting','finance'],['marketing','management']]);
+  const z1=pick([0.5,0.75,1,1.25]), z2=pick([1.5,1.75,2,0.25,-0.25]);
+  const sd1=pick([6,8,10]), mu1=pick([70,74,76,80]), sd2=pick([4,5,6]), mu2=pick([68,70,72,75]);
+  const x1=clean(mu1+z1*sd1), x2=clean(mu2+z2*sd2);
+  const better = z1>z2?0:1;
+  return {kind:'parts',title:'Which Score Is Better?',
+    intro:`You scored ${x1} on a ${pair[0]} exam (class mean ${mu1}, standard deviation ${sd1}) and ${x2} on a ${pair[1]} exam (class mean ${mu2}, standard deviation ${sd2}). Both sets of scores are normally distributed.`,
+    items:[
+     N('A',`What is your z-score on the ${pair[0]} exam?`,z1,{tol:{abs:0.01},neg:true,how:`(${x1} − ${mu1}) / ${sd1}`}),
+     N('B',`What is your z-score on the ${pair[1]} exam?`,z2,{tol:{abs:0.01},neg:true,how:`(${x2} − ${mu2}) / ${sd2}`}),
+     CH('C','On which exam did you perform better relative to your classmates?',[`The ${pair[0]} exam`,`The ${pair[1]} exam`],better,{how:'The higher z-score is farther above the class mean in standard deviations.'}),
+     N('D',`What proportion of the class scored below you on the ${pair[0]} exam?`,M.cdf(z1),{tol:PRZ,how:`=NORM.S.DIST(${z1},TRUE)`}),
+     N('E',`What proportion of the class scored below you on the ${pair[1]} exam?`,M.cdf(z2),{tol:PRZ,how:`=NORM.S.DIST(${z2},TRUE)`})]};
+});
+
+def('n_middle',6,'Percentiles and the middle of the distribution',()=>{
+  const c=pick(NCTX.slice(1,4)), mu=pick(c.mu), sd=pick(c.sd), z1=pick([1,1.25,1.5]), z2=pick([-2,-1.75,-1.5]);
+  const x1=clean(mu+z1*sd), x2=clean(mu+z2*sd), m=pick([90,95]), tail=(100-m)/200;
+  const lo=M.inv(tail)*sd+mu, hi=M.inv(1-tail)*sd+mu, p95=M.inv(.95)*sd+mu;
+  return {kind:'parts',title:'Percentiles',
+    intro:`${c.noun} is normally distributed with a mean of ${withUnit(c.unit,mu)} and a standard deviation of ${withUnit(c.unit,sd)}.`,
+    items:[
+     N('A',`What is the probability a value is more than ${withUnit(c.unit,x1)}?`,1-M.cdf(z1),{tol:PRZ,how:`z = ${z1}; =1-NORM.S.DIST(${z1},TRUE)`}),
+     N('B',`What is the probability a value is less than ${withUnit(c.unit,x2)}?`,M.cdf(z2),{tol:PRZ,how:`z = ${z2}; =NORM.S.DIST(${z2},TRUE)`}),
+     N('C',`What value (in ${c.unit}) marks the 95th percentile?`,p95,{tol:{abs:0.05},how:`=NORM.INV(0.95,${mu},${sd}) = ${f2(p95)}`}),
+     N('D',`The middle ${m}% of values lie between two limits. What is the lower limit?`,lo,{tol:{abs:0.05},how:`${(tail*100).toFixed(1).replace(/\.0$/,'')}% is left in each tail. =NORM.INV(${tail},${mu},${sd}) = ${f2(lo)}`}),
+     N('E',`What is the upper limit of the middle ${m}%?`,hi,{tol:{abs:0.05},how:`=NORM.INV(${(1-tail).toFixed(3).replace(/0+$/,'')},${mu},${sd}) = ${f2(hi)}`})]};
+});
+
+/* ---------- PART 7: UNIFORM ---------- */
+def('u_basic',7,'Uniform distribution basics',()=>{
+  const b=pick([10,12,15,16,20]), sc=pick([
+    {t:`After you reach the stop, the campus bus arrives at a random time between 0 and ${b} minutes, and every time in that window is equally likely.`,w:'wait'},
+    {t:`The wait for the library printer is uniformly distributed between 0 and ${b} minutes.`,w:'wait'},
+    {t:`Your food delivery arrives at a random time between 0 and ${b} minutes after the app's estimate, and every time in that window is equally likely.`,w:'delay'}]);
+  const lo=rnd(1,Math.floor(b/3)), hi=rnd(Math.ceil(b/2),b-2), t=b-rnd(2,Math.floor(b/3));
+  return {kind:'parts',title:'Uniform Distribution',intro:sc.t,
+    items:[
+     N('A',`What is the mean ${sc.w} (in minutes)?`,b/2,{tol:{abs:0.01},how:`(a + b)/2 = (0 + ${b})/2`}),
+     N('B','What is the height of the distribution?',1/b,{tol:{abs:0.0005,rel:0.01},dp:4,how:`1/(b − a) = 1/${b}`}),
+     N('C',`What is the probability the ${sc.w} is between ${lo} and ${hi} minutes?`,(hi-lo)/b,{how:`${hi-lo} × (1/${b}) = ${hi-lo}/${b}`}),
+     N('D',`What is the probability the ${sc.w} is more than ${t} minutes?`,(b-t)/b,{how:`${b-t} × (1/${b}) = ${b-t}/${b}`})]};
+});
+
+def('u_sd',7,'Uniform distribution: standard deviation',()=>{
+  const a=pick([5,10,15]), len=pick([20,30,40,60]), b=a+len, mid=(a+b)/2;
+  const sc=pick([`A campus Wi-Fi outage lasts between ${a} and ${b} minutes, and every length in that range is equally likely.`,
+                 `A professor's office-hours conversations last between ${a} and ${b} minutes, and every length in that range is equally likely.`]);
+  const q=Math.round(len/4), x=b-rnd(1,Math.floor(len/3)), lo=a+rnd(1,Math.floor(len/4)), hi=lo+rnd(2,Math.floor(len/4));
+  const sd=len/Math.sqrt(12);
+  return {kind:'parts',title:'Uniform Distribution',intro:sc,
+    items:[
+     N('A','What is the mean length (in minutes)?',mid,{tol:{abs:0.01},how:`(${a} + ${b})/2`}),
+     N('B','What is the standard deviation (in minutes)?',sd,{tol:{abs:0.01},how:`σ = √((b − a)²/12) = √(${len}²/12) = ${f4(sd)}`}),
+     N('C',`What is the probability it lasts at least ${x} minutes?`,(b-x)/len,{how:`${b-x} × (1/${len}) = ${b-x}/${len}`}),
+     N('D',`What is the probability it lasts between ${lo} and ${hi} minutes?`,(hi-lo)/len,{how:`${hi-lo} × (1/${len}) = ${hi-lo}/${len}`})]};
+});
+
+/* ============================================================
+   APP
+   ============================================================ */
+const $ = id => document.getElementById(id);
+const S = { mode:'full', part:1, shuffle:false, qs:[], idx:0 };
+
+function buildExam(){
+  let chosen=[];
+  if (S.mode==='full'){
+    const quota={1:4,2:6,3:3,4:3,5:3,6:3,7:2};
+    for (const p of Object.keys(quota)) chosen.push(...sample(TEMPLATES.filter(t=>t.part==+p),quota[p]));
+  } else {
+    chosen = TEMPLATES.filter(t=>t.part===+S.part);
+  }
+  if (S.shuffle) chosen = shuffle(chosen);
+  else chosen.sort((a,b)=>a.part-b.part);
+  S.qs = chosen.map(t=>{
+    const q = t.build(); q.id=t.id; q.part=t.part; q.topic=t.topic;
+    q.status='open'; q.score=0; q.done=false; q.snap=null;
+    return q;
+  });
+  S.idx=0;
+}
+
+/* ---------- intro ---------- */
+(function initIntro(){
+  const sel=$('partSel');
+  for (const p of Object.keys(PARTS)){ const o=document.createElement('option'); o.value=p; o.textContent=`Part ${p}: ${PARTS[p]}`; sel.appendChild(o); }
+  const radios=[...document.querySelectorAll('input[name=mode]')];
+  const sync=()=>{ S.mode=radios.find(r=>r.checked).value; $('optFull').classList.toggle('sel',S.mode==='full'); $('optPart').classList.toggle('sel',S.mode==='part'); };
+  radios.forEach(r=>r.addEventListener('change',sync));
+  sel.addEventListener('focus',()=>{ radios[1].checked=true; sync(); });
+  sel.addEventListener('change',()=>{ radios[1].checked=true; sync(); S.part=+sel.value; });
+  $('startBtn').addEventListener('click',()=>{ S.part=+sel.value; S.shuffle=$('shuf').checked; startQuiz(); });
+})();
+
+function show(id){ ['intro','quiz','results'].forEach(x=>$(x).classList.toggle('hidden',x!==id)); window.scrollTo({top:0}); }
+function startQuiz(){ buildExam(); show('quiz'); renderBubbles(); renderQ(); }
+
+/* ---------- bubbles ---------- */
+function bubClass(q,i){
+  if (i===S.idx) return 'bub cur' + (q.done ? ' '+scoreClass(q) : '');
+  if (q.done) return 'bub '+scoreClass(q);
+  if (q.status==='skipped') return 'bub skip';
+  return 'bub';
+}
+function scoreClass(q){ return q.score>=0.999 ? 'full' : q.score<=0.001 ? 'zero' : 'part'; }
+function renderBubbles(){
+  const b=$('bubbles'); b.innerHTML='';
+  S.qs.forEach((q,i)=>{
+    const el=document.createElement('button'); el.type='button'; el.className=bubClass(q,i); el.textContent=i+1;
+    el.setAttribute('aria-label',`Question ${i+1}`); el.addEventListener('click',()=>{ S.idx=i; renderBubbles(); renderQ(); });
+    b.appendChild(el);
+  });
+}
+
+/* ---------- question rendering ---------- */
+function tableHTML(t){
+  return '<table class="data"><tr>'+t.head.map(h=>`<th>${h}</th>`).join('')+'</tr>'+t.rows.map(r=>'<tr>'+r.map(c=>`<td>${c}</td>`).join('')+'</tr>').join('')+'</table>';
+}
+function renderQ(){
+  const q=S.qs[S.idx];
+  $('qtag').textContent=`Part ${q.part} · ${PARTS[q.part]}`;
+  $('qcount').textContent=`${S.idx+1} of ${S.qs.length}`;
+  $('qtitle').textContent=q.title;
+  let body=`<p>${q.intro}</p>`;
+  if (q.table) body+=tableHTML(q.table);
+  if (q.hint) body+=`<div class="hint">${q.hint}</div>`;
+  $('qbody').innerHTML=body;
+  const box=$('items'); box.innerHTML=''; box.className = q.done?'locked':'';
+  $('scorebar').innerHTML='';
+  if (q.kind==='match') q.rows.forEach((r,i)=>box.appendChild(matchRow(q,r,i)));
+  else if (q.kind==='multi') q.options.forEach((o,i)=>box.appendChild(multiRow(q,o,i)));
+  else q.items.forEach((it,i)=>box.appendChild(partRow(q,it,i)));
+  if (q.done) showFeedback(q,true);
+  renderButtons();
+  if (!q.done){ const first=box.querySelector('input.num,select.pick'); /* do not auto-focus on phones to avoid keyboard jump */ }
+}
+function letterEl(t){ const l=document.createElement('div'); l.className='letter'; l.textContent=t; return l; }
+function matchRow(q,r,i){
+  const d=document.createElement('div'); d.className='item'; d.dataset.i=i;
+  const lab=document.createElement('div'); lab.className='lab'; lab.appendChild(letterEl(i+1));
+  const t=document.createElement('div'); t.className='txt'; t.textContent=r.text; lab.appendChild(t); d.appendChild(lab);
+  const w=document.createElement('div'); w.className='inwrap';
+  const s=document.createElement('select'); s.className='pick'; s.disabled=q.done;
+  s.innerHTML='<option value="">Choose…</option>'+q.bank.map(b=>`<option value="${b.replace(/"/g,'&quot;')}">${b}</option>`).join('');
+  if (q.saved && q.saved[i]!=null) s.value=q.saved[i];
+  s.addEventListener('change',()=>{ q.saved=q.saved||[]; q.saved[i]=s.value; });
+  w.appendChild(s); d.appendChild(w); return d;
+}
+function multiRow(q,o,i){
+  const l=document.createElement('label'); l.className='chk'+((q.saved&&q.saved[i])?' on':''); l.dataset.i=i;
+  const c=document.createElement('input'); c.type='checkbox'; c.disabled=q.done; c.checked=!!(q.saved&&q.saved[i]);
+  c.addEventListener('change',()=>{ q.saved=q.saved||[]; q.saved[i]=c.checked; l.classList.toggle('on',c.checked); });
+  const t=document.createElement('span'); t.textContent=o.text; l.appendChild(c); l.appendChild(t); return l;
+}
+function partRow(q,it,i){
+  const d=document.createElement('div'); d.className='item'; d.dataset.i=i;
+  if (it.pre){ const p=document.createElement('div'); p.innerHTML=it.pre; d.appendChild(p); }
+  const lab=document.createElement('div'); lab.className='lab'; lab.appendChild(letterEl(it.label));
+  const t=document.createElement('div'); t.className='txt'; t.textContent=it.text; lab.appendChild(t); d.appendChild(lab);
+  const w=document.createElement('div'); w.className='inwrap';
+  if (it.type==='num'){
+    const inp=document.createElement('input'); inp.className='num'; inp.type='text';
+    inp.inputMode = it.neg ? 'text' : 'decimal'; inp.autocomplete='off'; inp.autocapitalize='off'; inp.spellcheck=false;
+    inp.placeholder = it.neg ? 'e.g. −1.25' : (it.dp===0 ? 'whole number' : 'your answer'); inp.disabled=q.done;
+    if (q.saved && q.saved[i]!=null) inp.value=q.saved[i];
+    inp.addEventListener('input',()=>{ q.saved=q.saved||[]; q.saved[i]=inp.value; });
+    inp.addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); advanceFrom(inp); } });
+    w.appendChild(inp);
+  } else {
+    const g=document.createElement('div'); g.className='seg';
+    it.choices.forEach((c,ci)=>{
+      const lb=document.createElement('label'); const r=document.createElement('input'); r.type='radio'; r.name=`q${S.idx}_${i}`; r.value=ci; r.disabled=q.done;
+      if (q.saved && q.saved[i]===ci){ r.checked=true; lb.classList.add('on'); }
+      r.addEventListener('change',()=>{ q.saved=q.saved||[]; q.saved[i]=ci; g.querySelectorAll('label').forEach(x=>x.classList.remove('on')); lb.classList.add('on'); });
+      lb.appendChild(r); lb.appendChild(document.createTextNode(c)); g.appendChild(lb);
+    });
+    w.appendChild(g);
+  }
+  d.appendChild(w); return d;
+}
+function advanceFrom(inp){
+  const all=[...$('items').querySelectorAll('input.num')]; const i=all.indexOf(inp);
+  if (i>=0 && i<all.length-1) all[i+1].focus(); else { inp.blur(); checkAnswer(); }
+}
+
+/* ---------- buttons ---------- */
+function renderButtons(){
+  const q=S.qs[S.idx], r=$('qbtns'); r.innerHTML='';
+  const mk=(txt,cls,fn)=>{ const b=document.createElement('button'); b.type='button'; b.className=cls; b.textContent=txt; b.addEventListener('click',fn); r.appendChild(b); };
+  if (!q.done){ mk('Check answer','btn-primary',checkAnswer); mk('Skip for now','btn-ghost',skipQ); }
+  else {
+    const left = S.qs.filter(x=>!x.done).length;
+    mk(left? 'Next question' : 'See results','btn-primary',nextQ);
+  }
+}
+function nextQ(){
+  const n=S.qs.length;
+  for (let k=1;k<=n;k++){ const j=(S.idx+k)%n; if(!S.qs[j].done){ S.idx=j; renderBubbles(); renderQ(); window.scrollTo({top:0,behavior:'smooth'}); return; } }
+  showResults();
+}
+function skipQ(){
+  const q=S.qs[S.idx]; q.status='skipped';
+  const left=S.qs.filter(x=>!x.done && x!==q);
+  if (!left.length){ renderBubbles(); confirmFinish(); return; }
+  nextQ();
+}
+document.addEventListener('keydown',e=>{
+  if (e.key==='Enter' && !$('quiz').classList.contains('hidden') && $('modal').classList.contains('hidden')){
+    const q=S.qs[S.idx]; const tag=(document.activeElement||{}).tagName;
+    if (q.done){ e.preventDefault(); nextQ(); }
+    else if (q.kind!=='parts' && tag!=='INPUT') { /* let selects work normally */ }
+  }
+});
+
+/* ---------- checking ---------- */
+function gather(q){
+  const box=$('items');
+  if (q.kind==='match') return q.rows.map((r,i)=>box.querySelector(`.item[data-i="${i}"] select`).value);
+  if (q.kind==='multi') return q.options.map((o,i)=>box.querySelector(`.chk[data-i="${i}"] input`).checked);
+  return q.items.map((it,i)=>{
+    const d=box.querySelector(`.item[data-i="${i}"]`);
+    if (it.type==='num') return d.querySelector('input.num').value;
+    const r=d.querySelector('input[type=radio]:checked'); return r? +r.value : null;
+  });
+}
+function checkAnswer(){
+  const q=S.qs[S.idx]; if(q.done) return;
+  const ans=gather(q); q.saved=ans;
+  let oks=[], disp=[], corr=[], how=[], labels=[];
+  if (q.kind==='match'){
+    q.rows.forEach((r,i)=>{ oks.push(ans[i]===r.ans); disp.push(ans[i]||'(no answer)'); corr.push(r.ans); how.push(r.how); labels.push(String(i+1)); });
+    q.score = oks.filter(Boolean).length / oks.length;
+  } else if (q.kind==='multi'){
+    q.options.forEach((o,i)=>{ oks.push(ans[i]===o.ans); disp.push(ans[i]?'Selected':'Not selected'); corr.push(o.ans?'Should be selected':'Should not be selected'); how.push(o.how); labels.push(String.fromCharCode(65+i)); });
+    const nTrue=q.options.filter(o=>o.ans).length;
+    const tp=q.options.filter((o,i)=>o.ans&&ans[i]).length, fpn=q.options.filter((o,i)=>!o.ans&&ans[i]).length;
+    q.score=Math.max(0,(tp-fpn)/nTrue);
+  } else {
+    q.items.forEach((it,i)=>{
+      let ok,dv,cv;
+      if (it.type==='num'){ const v=parseNum(ans[i]); ok=numOK(v,it.ans,it.tol); dv=ans[i]===''||ans[i]==null?'(no answer)':ans[i]; cv=formatAns(it); }
+      else { ok = ans[i]===it.ans; dv = ans[i]==null?'(no answer)':it.choices[ans[i]]; cv=it.choices[it.ans]; }
+      oks.push(ok); disp.push(dv); corr.push(cv); how.push(it.how); labels.push(it.label);
+    });
+    q.score = oks.filter(Boolean).length / oks.length;
+  }
+  q.oks=oks; q.disp=disp; q.corr=corr; q.how=how; q.labels=labels;
+  q.done=true; q.status='done';
+  $('items').className='locked';
+  lockInputs(); showFeedback(q,false); renderButtons(); renderBubbles();
+}
+function formatAns(it){
+  if (it.ans!==0 && Math.abs(it.ans)<0.0005 && it.dp>0) return it.ans.toPrecision(3);
+  const v = it.dp===0 ? Math.round(it.ans) : it.ans;
+  return it.dp===0 ? nf(v) : v.toFixed(it.dp).replace(/(\.\d*?)0+$/,'$1').replace(/\.$/,'');
+}
+function lockInputs(){ $('items').querySelectorAll('input,select').forEach(x=>x.disabled=true); }
+function showFeedback(q,restoring){
+  const box=$('items');
+  const rows = q.kind==='match' ? q.rows.map((r,i)=>box.querySelector(`.item[data-i="${i}"]`))
+             : q.kind==='multi' ? q.options.map((o,i)=>box.querySelector(`.chk[data-i="${i}"]`))
+             : q.items.map((it,i)=>box.querySelector(`.item[data-i="${i}"]`));
+  rows.forEach((row,i)=>{
+    const old=row.querySelector('.fb'); if(old) old.remove();
+    const f=document.createElement('div'); f.className='fb '+(q.oks[i]?'ok':'bad');
+    const how = q.how[i] ? `<span class="how">${/[=]/.test(q.how[i]) ? q.how[i].replace(/(=[A-Z.]+\([^)]*\))/g,'<code>$1</code>') : q.how[i]}</span>` : '';
+    f.innerHTML = (q.oks[i] ? '✓ Correct' : `✗ Correct answer: <b>${escapeHTML(q.corr[i])}</b>`) + how;
+    if (q.kind==='multi'){ row.after(f); f.style.margin='-2px 0 8px 4px'; } else row.appendChild(f);
+  });
+  const frac = Math.round(q.score*100)/100;
+  const bar=document.createElement('div'); bar.className='scorebar '+scoreClass(q);
+  const parts=q.oks.length, right=q.oks.filter(Boolean).length;
+  bar.textContent = q.kind==='multi' ? `Score for this question: ${(q.score).toFixed(2)} of 1` : `${right} of ${parts} correct (${frac.toFixed(2)} of 1)`;
+  $('scorebar').innerHTML=''; $('scorebar').appendChild(bar);
+}
+function escapeHTML(s){ return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+
+/* ---------- finish + results ---------- */
+function openModal(html){ $('modalBox').innerHTML=html; $('modal').classList.remove('hidden'); }
+function closeModal(){ $('modal').classList.add('hidden'); }
+function confirmFinish(){
+  const left=S.qs.filter(q=>!q.done).length;
+  if (!left){ showResults(); return; }
+  openModal(`<h3>Finish now?</h3><p class="muted">${left} question${left>1?'s are':' is'} still unanswered and will count as zero.</p>
+    <div class="btn-row"><button class="btn-ghost" id="mBack">Go back</button><button class="btn-primary" id="mGo">Finish</button></div>`);
+  $('mBack').onclick=()=>{ closeModal(); const j=S.qs.findIndex(q=>!q.done); if(j>=0){ S.idx=j; renderBubbles(); renderQ(); } };
+  $('mGo').onclick=()=>{ closeModal(); showResults(); };
+}
+$('finishEarly').addEventListener('click',confirmFinish);
+
+function showResults(){
+  const tot=S.qs.length, pts=S.qs.reduce((s,q)=>s+(q.done?q.score:0),0), pct=Math.round(pts/tot*100);
+  const missed={};
+  S.qs.forEach(q=>{ const lost = q.done ? 1-q.score : 1; if(lost>0.001) missed[q.topic]=(missed[q.topic]||0)+lost; });
+  const topics=Object.entries(missed).sort((a,b)=>b[1]-a[1]);
+  const msg = pct>=90?'Outstanding. You are ready.':pct>=80?'Strong. Review the topics below and you are there.':pct>=70?'Solid start. A few topics need another pass.':'Keep going. Work through the review list and try again.';
+  const r=$('results'); r.innerHTML='';
+  const c=document.createElement('div'); c.className='card';
+  c.innerHTML=`<div class="eyebrow">RESULTS</div><div class="bigscore">${pts.toFixed(1)} / ${tot}</div><div class="pct">${pct}%</div><p style="margin:10px 0 0">${msg}</p>`;
+  r.appendChild(c);
+  const c2=document.createElement('div'); c2.className='card'; c2.style.marginTop='14px';
+  c2.innerHTML='<h2>Review these topics</h2>';
+  if(!topics.length) c2.innerHTML+='<p class="muted">Nothing to review. Perfect score.</p>';
+  topics.forEach(([t,v])=>{ const row=document.createElement('div'); row.className='topic-row'; row.innerHTML=`<span>${escapeHTML(t)}</span><span class="pill">${(Math.round(v*10)/10).toString()} missed</span>`; c2.appendChild(row); });
+  r.appendChild(c2);
+  const bad=S.qs.map((q,i)=>({q,i})).filter(({q})=>!q.done || q.score<0.999);
+  if (bad.length){
+    const c3=document.createElement('div'); c3.className='card'; c3.style.marginTop='14px'; c3.innerHTML='<h2>Questions to revisit</h2>';
+    bad.forEach(({q,i})=>{
+      const det=document.createElement('details'); det.className='rev';
+      const sm=document.createElement('summary'); sm.textContent=`${i+1}. ${q.title}${q.done?'':' (not answered)'}`; det.appendChild(sm);
+      const inner=document.createElement('div'); inner.className='inner';
+      const intro=document.createElement('div'); intro.style.margin='0 0 6px'; intro.innerHTML=q.intro; inner.appendChild(intro);
+      if (q.table){ const tw=document.createElement('div'); tw.innerHTML=tableHTML(q.table); inner.appendChild(tw); }
+      if (q.done){
+        q.oks.forEach((ok,k)=>{ if(ok) return;
+          const line=document.createElement('div'); line.className='revline';
+          const lbl = q.kind==='match' ? q.rows[k].text : q.kind==='multi' ? q.options[k].text : q.items[k].text;
+          const p=document.createElement('div'); p.textContent=`${q.labels[k]}. ${lbl}`; line.appendChild(p);
+          const y=document.createElement('div'); y.className='you'; y.textContent='You: '+q.disp[k]; line.appendChild(y);
+          const a=document.createElement('div'); a.className='corr'; a.textContent='Answer: '+q.corr[k]; line.appendChild(a);
+          if(q.how[k]){ const h=document.createElement('div'); h.className='muted'; h.textContent=q.how[k]; line.appendChild(h); }
+          inner.appendChild(line); });
+      } else {
+        const p=document.createElement('p'); p.className='muted'; p.textContent='You did not answer this one. Go back and try it with a fresh set of numbers.'; inner.appendChild(p);
+      }
+      det.appendChild(inner); c3.appendChild(det);
+    });
+    r.appendChild(c3);
+  }
+  const br=document.createElement('div'); br.className='btn-row';
+  const again=document.createElement('button'); again.className='btn-primary'; again.textContent='Try again with new numbers'; again.onclick=startQuiz;
+  const home=document.createElement('button'); home.className='btn-ghost'; home.textContent='Back to start'; home.onclick=()=>show('intro');
+  br.appendChild(again); br.appendChild(home); r.appendChild(br);
+  show('results');
+}
+
+/* test hooks (harmless; used for automated checks) */
+window.__U2 = { M, TEMPLATES, parseNum, numOK, S, buildExam, PARTS };
+</script>
+</body>
+</html>
